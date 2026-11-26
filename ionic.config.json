@@ -1,0 +1,7 @@
+{
+  "name": "GuiaTuristica",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
