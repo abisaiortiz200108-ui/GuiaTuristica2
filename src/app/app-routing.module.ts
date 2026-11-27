@@ -2,6 +2,15 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+    {
+    path: '',
+    redirectTo: 'bienvenida',
+    pathMatch: 'full'
+  },
+  {
+    path: 'bienvenida',
+    loadChildren: () => import('./pages/bienvenida/bienvenida.module').then(m => m.BienvenidaPageModule)
+  },
   {
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
@@ -13,7 +22,10 @@ const routes: Routes = [
   {
     path: 'editar/:id',
     loadChildren: () => import('./pages/sitio-form/sitio-form.module').then(m => m.SitioFormPageModule)
-  }
+  },
+  
+  
+
 ];
 
 @NgModule({

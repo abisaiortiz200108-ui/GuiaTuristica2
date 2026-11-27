@@ -1,0 +1,37 @@
+<ion-content [fullscreen]="true" class="bienvenida-content">
+  <div class="bienvenida">
+
+    <!-- Decoración de fondo -->
+    <div class="nube nube-1"></div>
+    <div class="nube nube-2"></div>
+    <div class="nube nube-3"></div>
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="assets/img/guia-turistica.png" alt="Guía Turística" class="logo" />
+    </div>
+
+    <!-- Texto -->
+    <div class="textos">
+      <h1 class="titulo">¡Bienvenido!</h1>
+      <p class="subtitulo">
+        Descubre los lugares más bonitos cerca de ti y arma tu propia guía local.
+      </p>
+    </div>
+
+    <!-- Características -->
+    <div class="caracteristicas">
+      <div class="chip" *ngFor="let c of caracteristicas">
+        <ion-icon [name]="c.icono"></ion-icon>
+        <span>{{ c.texto }}</span>
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <ion-button class="btn-comenzar" expand="block" shape="round" (click)="irAInicio()">
+      Comenzar
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+
+  </div>
+</ion-content>
