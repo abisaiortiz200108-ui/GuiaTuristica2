@@ -1,0 +1,237 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start" *ngIf="modoEdicion">
+      <ion-back-button defaultHref="/tabs/explorar"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ modoEdicion ? 'Editar Sitio Turístico' : 'Agregar Sitio Turístico' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="form-container">
+
+    <!-- Tarjeta 1: Información General -->
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Información del Sitio
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="field-group">
+          <label class="field-label">Nombre del Sitio *</label>
+          <ion-item lines="none" class="styled-input">
+            <ion-icon slot="start" name="trail-sign-outline" class="input-icon"></ion-icon>
+            <ion-input
+              type="text"
+              [(ngModel)]="nombre"
+              placeholder="Ej. Puente de Choluteca">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Categoría *</label>
+          <ion-item lines="none" class="styled-input">
+            <ion-icon slot="start" name="pricetag-outline" class="input-icon"></ion-icon>
+            <ion-select
+              [(ngModel)]="categoria"
+              placeholder="Seleccione una categoría"
+              interface="popover">
+              <ion-select-option value="Naturaleza">Naturaleza</ion-select-option>
+              <ion-select-option value="Gastronomía">Gastronomía</ion-select-option>
+              <ion-select-option value="Historia">Historia</ion-select-option>
+              <ion-select-option value="Cultura">Cultura</ion-select-option>
+              <ion-select-option value="Recreación">Recreación</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="two-cols">
+          <div class="field-group">
+            <label class="field-label">Horario</label>
+            <ion-item lines="none" class="styled-input">
+              <ion-icon slot="start" name="time-outline" class="input-icon"></ion-icon>
+              <ion-input
+                type="text"
+                [(ngModel)]="horario"
+                placeholder="8:00 AM - 6:00 PM">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Costo Entrada</label>
+            <ion-item lines="none" class="styled-input">
+              <ion-icon slot="start" name="cash-outline" class="input-icon"></ion-icon>
+              <ion-input
+                type="text"
+                [(ngModel)]="costoEntrada"
+                placeholder="Gratis / L. 50">
+              </ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tarjeta 2: Descripción, Valoración y Estado -->
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="document-text-outline"></ion-icon>
+          Descripción y Valoración
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="field-group">
+          <label class="field-label">Descripción *</label>
+          <ion-item lines="none" class="styled-input textarea-box">
+            <ion-textarea
+              rows="4"
+              autoGrow="true"
+              [(ngModel)]="descripcion"
+              placeholder="Describe qué hace especial este lugar, cómo llegar o recomendaciones...">
+            </ion-textarea>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Valoración Personal (1 a 5) *</label>
+          <div class="rating-picker">
+            <ion-button
+              *ngFor="let estrella of [1, 2, 3, 4, 5]"
+              fill="clear"
+              class="star-btn"
+              (click)="valoracion = estrella">
+              <ion-icon
+                slot="icon-only"
+                [name]="estrella <= valoracion ? 'star' : 'star-outline'"
+                [class.star-active]="estrella <= valoracion">
+              </ion-icon>
+            </ion-button>
+            <span class="rating-text">{{ valoracion }}/5</span>
+          </div>
+        </div>
+
+        <ion-item lines="none" class="toggle-item">
+          <ion-icon slot="start" name="checkmark-circle-outline" class="input-icon"></ion-icon>
+          <ion-label>Ya visité este sitio</ion-label>
+          <ion-toggle slot="end" [(ngModel)]="visitado"></ion-toggle>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tarjeta 3: Fotografía (Cámara + Galería con Filesystem) -->
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="camera-outline"></ion-icon>
+          Fotografía del Sitio *
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="foto-wrapper" *ngIf="fotoPath">
+          <img [src]="fotoPath" alt="Vista previa del sitio" />
+        </div>
+
+        <div class="foto-empty" *ngIf="!fotoPath" (click)="tomarFoto()">
+          <ion-icon name="camera-outline"></ion-icon>
+          <span>Capture con la cámara o seleccione desde la galería</span>
+        </div>
+
+        <div class="foto-actions">
+          <ion-button
+            fill="outline"
+            size="small"
+            class="btn-outline"
+            (click)="tomarFoto()">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            Cámara
+          </ion-button>
+
+          <ion-button
+            fill="outline"
+            size="small"
+            color="secondary"
+            class="btn-outline"
+            (click)="seleccionarDeGaleria()">
+            <ion-icon slot="start" name="images-outline"></ion-icon>
+            Galería
+          </ion-button>
+
+          <ion-button
+            *ngIf="fotoPath"
+            fill="outline"
+            color="danger"
+            size="small"
+            class="btn-remove"
+            (click)="fotoPath = ''">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tarjeta 4: Coordenadas GPS -->
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="navigate-outline"></ion-icon>
+          Ubicación GPS *
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="gps-boxes" *ngIf="latitud !== 0">
+          <div class="gps-box">
+            <span class="lbl">Latitud</span>
+            <span class="val">{{ latitud | number:'1.4-6' }}</span>
+          </div>
+          <div class="gps-box">
+            <span class="lbl">Longitud</span>
+            <span class="val">{{ longitud | number:'1.4-6' }}</span>
+          </div>
+          <div class="gps-box">
+            <span class="lbl">Precisión</span>
+            <span class="val">±{{ precision | number:'1.1-2' }} m</span>
+          </div>
+        </div>
+
+        <p class="gps-empty" *ngIf="latitud === 0">
+          Aún no se han capturado las coordenadas GPS del lugar.
+        </p>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          size="small"
+          class="btn-outline ion-margin-top"
+          (click)="obtenerCoordenadasGPS()"
+          [disabled]="cargandoUbicacion">
+          <ion-spinner *ngIf="cargandoUbicacion" name="crescent" slot="start"></ion-spinner>
+          <ion-icon *ngIf="!cargandoUbicacion" slot="start" name="location-outline"></ion-icon>
+          {{ cargandoUbicacion ? 'Obteniendo GPS...' : (latitud !== 0 ? 'Actualizar Ubicación GPS' : 'Obtener Coordenadas GPS') }}
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
+
+<ion-footer class="page-footer ion-no-border">
+  <ion-toolbar class="footer-toolbar">
+    <ion-button
+      expand="block"
+      color="primary"
+      class="btn-submit"
+      (click)="guardarSitio()">
+      <ion-icon slot="start" name="save-outline"></ion-icon>
+      {{ modoEdicion ? 'Actualizar Sitio' : 'Guardar Sitio Turístico' }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

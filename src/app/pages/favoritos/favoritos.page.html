@@ -1,0 +1,138 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Favoritos y Ajustes</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment [(ngModel)]="vistaActual">
+      <ion-segment-button value="favoritos">
+        <ion-label>Favoritos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="visitados">
+        <ion-label>Visitados</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="ajustes">
+        <ion-label>Ajustes</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page-container">
+
+    <!-- Vista: Favoritos o Visitados -->
+    <ng-container *ngIf="vistaActual === 'favoritos' || vistaActual === 'visitados'">
+      <ion-card
+        *ngFor="let sitio of (vistaActual === 'favoritos' ? listaFavoritos : listaVisitados)"
+        class="sitio-card"
+        button
+        (click)="abrirDetalle(sitio.id)">
+        <ion-card-content class="sitio-card-content">
+          <div class="sitio-thumb" *ngIf="sitio.fotoPath">
+            <img [src]="sitio.fotoPath" [alt]="sitio.nombre" />
+          </div>
+          <div class="sitio-icon-thumb" *ngIf="!sitio.fotoPath">
+            <ion-icon name="image-outline"></ion-icon>
+          </div>
+
+          <div class="sitio-info">
+            <div class="sitio-header-row">
+              <h3 class="sitio-nombre">{{ sitio.nombre }}</h3>
+              <ion-badge color="warning" class="rating-badge">★ {{ sitio.valoracion }}</ion-badge>
+            </div>
+            <p class="sitio-categoria">{{ sitio.categoria }}</p>
+            <p class="descripcion-corta">{{ sitio.descripcion }}</p>
+          </div>
+
+          <ion-button
+            *ngIf="vistaActual === 'favoritos'"
+            fill="clear"
+            color="danger"
+            class="btn-unfav"
+            (click)="quitarFavorito($event, sitio.id)">
+            <ion-icon slot="icon-only" name="heart"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <div
+        *ngIf="(vistaActual === 'favoritos' && listaFavoritos.length === 0) || (vistaActual === 'visitados' && listaVisitados.length === 0)"
+        class="empty-state ion-text-center">
+        <ion-icon
+          [name]="vistaActual === 'favoritos' ? 'heart-dislike-outline' : 'checkmark-done-circle-outline'"
+          class="empty-icon">
+        </ion-icon>
+        <p>
+          {{ vistaActual === 'favoritos' ? 'Aún no tienes sitios marcados como favoritos' : 'Todavía no has marcado sitios como visitados' }}
+        </p>
+      </div>
+    </ng-container>
+
+    <!-- Vista: Ajustes y Preferencias Locales -->
+    <ng-container *ngIf="vistaActual === 'ajustes'">
+      <ion-card class="settings-card">
+        <ion-card-header>
+          <ion-card-subtitle class="seccion-label">
+            <ion-icon name="color-palette-outline"></ion-icon>
+            Apariencia y Experiencia
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content class="settings-list">
+          <ion-item lines="none" class="setting-item">
+            <ion-icon slot="start" name="moon-outline" class="setting-icon"></ion-icon>
+            <ion-label>
+              <h3>Modo Oscuro</h3>
+              <p>Se guarda localmente con Preferences</p>
+            </ion-label>
+            <ion-toggle
+              slot="end"
+              [(ngModel)]="modoOscuro"
+              (ionChange)="cambiarModoOscuro()">
+            </ion-toggle>
+          </ion-item>
+
+          <ion-item lines="none" class="setting-item">
+            <ion-icon slot="start" name="phone-portrait-outline" class="setting-icon"></ion-icon>
+            <ion-label>
+              <h3>Vibración (Haptics)</h3>
+              <p>Respuesta táctil al marcar favoritos</p>
+            </ion-label>
+            <ion-toggle
+              slot="end"
+              [(ngModel)]="hapticsActivo"
+              (ionChange)="cambiarHaptics()">
+            </ion-toggle>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="settings-card">
+        <ion-card-header>
+          <ion-card-subtitle class="seccion-label">
+            <ion-icon name="server-outline"></ion-icon>
+            Almacenamiento Local
+          </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="storage-info">
+            Todos los sitios, fotografías y preferencias se guardan 100% en este dispositivo sin conexión a Internet.
+          </p>
+          <ion-button
+            expand="block"
+            fill="outline"
+            color="danger"
+            size="small"
+            class="btn-outline"
+            (click)="confirmarLimpiarDatos()">
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            Restablecer Guía Local
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+  </div>
+</ion-content>

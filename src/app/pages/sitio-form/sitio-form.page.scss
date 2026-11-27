@@ -1,0 +1,267 @@
+.page-content {
+  --background: var(--ion-background-color);
+}
+
+.form-container {
+  padding: 12px 14px 20px 14px;
+}
+
+.form-card {
+  margin: 0 0 12px 0;
+  border-radius: 14px;
+  background: var(--app-card-bg);
+  box-shadow: 0 4px 12px var(--app-shadow);
+  border: 1px solid var(--app-border);
+
+  ion-card-header {
+    padding-bottom: 8px;
+  }
+
+  .seccion-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.field-group {
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+    margin-bottom: 6px;
+  }
+}
+
+.two-cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.styled-input {
+  --background: var(--app-surface);
+  --color: var(--ion-text-color);
+  --border-radius: 10px;
+  --padding-start: 10px;
+  --inner-padding-end: 10px;
+  --min-height: 46px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  .input-icon {
+    font-size: 18px;
+    color: var(--ion-color-primary);
+    margin-right: 8px;
+  }
+
+  ion-input,
+  ion-select {
+    width: 100%;
+    font-size: 0.92rem;
+    color: var(--ion-text-color);
+  }
+}
+
+.textarea-box {
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+
+  ion-textarea {
+    font-size: 0.94rem;
+    line-height: 1.45;
+    color: var(--ion-text-color);
+  }
+}
+
+// Selector de estrellas 1-5
+.rating-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+
+  .star-btn {
+    margin: 0;
+    --padding-start: 4px;
+    --padding-end: 4px;
+
+    ion-icon {
+      font-size: 26px;
+      color: var(--ion-color-medium);
+
+      &.star-active {
+        color: var(--ion-color-warning);
+      }
+    }
+  }
+
+  .rating-text {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+    margin-left: 6px;
+  }
+}
+
+.toggle-item {
+  margin-top: 12px;
+  --background: var(--app-surface);
+  --color: var(--ion-text-color);
+  --border-radius: 10px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  .input-icon {
+    color: var(--ion-color-success);
+    font-size: 20px;
+    margin-right: 10px;
+  }
+}
+
+// Evidencia fotográfica
+.foto-wrapper {
+  width: 100%;
+  max-height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    max-height: 240px;
+    object-fit: contain;
+  }
+}
+
+.foto-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: var(--app-surface);
+  border: 1.5px dashed var(--app-border);
+  color: var(--ion-color-medium);
+  text-align: center;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 34px;
+    color: var(--ion-color-primary);
+    opacity: 0.85;
+  }
+
+  span {
+    font-size: 0.83rem;
+  }
+}
+
+.foto-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  .btn-outline {
+    flex: 1;
+    margin: 0;
+  }
+
+  .btn-remove {
+    margin: 0;
+    --border-radius: 10px;
+  }
+}
+
+// Bloque GPS
+.gps-boxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  text-align: center;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  padding: 10px 6px;
+  border-radius: 8px;
+
+  .gps-box {
+    display: flex;
+    flex-direction: column;
+
+    .lbl {
+      font-size: 0.7rem;
+      color: var(--ion-color-medium);
+      text-transform: uppercase;
+    }
+
+    .val {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--ion-text-color);
+      margin-top: 3px;
+    }
+  }
+}
+
+.gps-empty {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  font-size: 0.84rem;
+  color: var(--ion-color-medium);
+  text-align: center;
+}
+
+.btn-outline {
+  --border-radius: 10px;
+  font-weight: 600;
+}
+
+// Footer fijo con área segura
+.page-footer {
+  border-top: 1px solid var(--app-border);
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  background: var(--app-card-bg);
+
+  .footer-toolbar {
+    --background: transparent;
+    padding: 6px 14px 2px 14px;
+  }
+
+  .btn-submit {
+    margin: 0;
+    font-weight: 600;
+    --border-radius: 10px;
+    height: 44px;
+  }
+}

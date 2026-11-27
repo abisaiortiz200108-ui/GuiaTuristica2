@@ -1,0 +1,145 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Guía Turística Local</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="actualizarUbicacion()" fill="clear" color="light">
+        <ion-icon slot="icon-only" name="locate-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page-container">
+
+    <!-- Tarjeta de Resumen General -->
+    <ion-card class="hero-card">
+      <ion-card-content class="hero-content">
+        <div class="hero-stat">
+          <span class="stat-val">{{ totalSitios }}</span>
+          <span class="stat-lbl">Sitios</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-val">{{ totalFavoritos }}</span>
+          <span class="stat-lbl">Favoritos</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-val">{{ totalVisitados }}</span>
+          <span class="stat-lbl">Visitados</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Resumen por Categoría -->
+    <div class="section-header">
+      <span class="seccion-label">
+        <ion-icon name="layers-outline"></ion-icon>
+        Resumen por Categoría
+      </span>
+    </div>
+
+    <div class="categorias-grid">
+      <div
+        *ngFor="let cat of resumenCategorias"
+        class="categoria-pill"
+        (click)="irACategoria(cat.nombre)">
+        <ion-icon [name]="cat.icono" class="cat-icon"></ion-icon>
+        <div class="cat-text">
+          <span class="cat-name">{{ cat.nombre }}</span>
+          <span class="cat-count">{{ cat.cantidad }} lugares</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sitios Más Cercanos -->
+    <div class="section-header">
+      <span class="seccion-label">
+        <ion-icon name="navigate-outline"></ion-icon>
+        Más Cercanos a Ti
+      </span>
+      <ion-button fill="clear" size="small" class="btn-ver-todo" (click)="irAExplorar('distancia')">
+        Ver todos
+      </ion-button>
+    </div>
+
+    <div *ngIf="!ubicacionDisponible" class="info-banner">
+      <ion-icon name="location-outline"></ion-icon>
+      <p>Activa el GPS para calcular la distancia real a los sitios cercanos.</p>
+    </div>
+
+    <ion-card
+      *ngFor="let sitio of sitiosCercanos"
+      class="sitio-card"
+      button
+      (click)="abrirDetalle(sitio.id)">
+      <ion-card-content class="sitio-card-content">
+        <div class="sitio-thumb" *ngIf="sitio.fotoPath">
+          <img [src]="sitio.fotoPath" [alt]="sitio.nombre" />
+        </div>
+        <div class="sitio-icon-thumb" *ngIf="!sitio.fotoPath">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+
+        <div class="sitio-info">
+          <div class="sitio-header-row">
+            <h3 class="sitio-nombre">{{ sitio.nombre }}</h3>
+            <ion-badge color="primary" class="distancia-badge" *ngIf="sitio.distanciaKm !== undefined">
+              {{ sitio.distanciaKm | number:'1.1-1' }} km
+            </ion-badge>
+          </div>
+          <p class="sitio-categoria">{{ sitio.categoria }}</p>
+          <div class="rating-row">
+            <ion-icon name="star" class="star-filled"></ion-icon>
+            <span>{{ sitio.valoracion }}.0 / 5</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Sitios Destacados (Mejor Valorados) -->
+    <div class="section-header">
+      <span class="seccion-label">
+        <ion-icon name="star-outline"></ion-icon>
+        Sitios Destacados
+      </span>
+      <ion-button fill="clear" size="small" class="btn-ver-todo" (click)="irAExplorar('valoracion')">
+        Ver todos
+      </ion-button>
+    </div>
+
+    <ion-card
+      *ngFor="let sitio of sitiosDestacados"
+      class="sitio-card"
+      button
+      (click)="abrirDetalle(sitio.id)">
+      <ion-card-content class="sitio-card-content">
+        <div class="sitio-thumb" *ngIf="sitio.fotoPath">
+          <img [src]="sitio.fotoPath" [alt]="sitio.nombre" />
+        </div>
+        <div class="sitio-icon-thumb" *ngIf="!sitio.fotoPath">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+
+        <div class="sitio-info">
+          <div class="sitio-header-row">
+            <h3 class="sitio-nombre">{{ sitio.nombre }}</h3>
+            <ion-badge color="warning" class="rating-badge">
+              ★ {{ sitio.valoracion }}
+            </ion-badge>
+          </div>
+          <p class="sitio-categoria">{{ sitio.categoria }}</p>
+          <p class="descripcion-corta">{{ sitio.descripcion }}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Estado Vacío -->
+    <div *ngIf="totalSitios === 0" class="empty-state ion-text-center">
+      <ion-icon name="map-outline" class="empty-icon"></ion-icon>
+      <p>Aún no has registrado sitios turísticos. Toca "Agregar" para comenzar tu guía local.</p>
+    </div>
+
+  </div>
+</ion-content>

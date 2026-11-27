@@ -1,0 +1,189 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/explorar"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="detalle-titulo">{{ sitio?.nombre || 'Detalle del Sitio' }}</ion-title>
+    <ion-buttons slot="end" *ngIf="sitio">
+      <ion-button (click)="alternarFavorito()" fill="clear" color="light">
+        <ion-icon
+          slot="icon-only"
+          [name]="sitio.favorito ? 'heart' : 'heart-outline'"
+          [class.fav-active]="sitio.favorito">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page-container" *ngIf="sitio">
+
+    <!-- Fotografía Ampliada -->
+    <div class="foto-wrapper" *ngIf="sitio.fotoPath">
+      <img [src]="sitio.fotoPath" [alt]="sitio.nombre" />
+    </div>
+
+    <!-- Tarjeta Principal -->
+    <ion-card class="detail-card">
+      <ion-card-header>
+        <div class="card-status-row">
+          <div class="badges-group">
+            <ion-badge color="primary" class="badge-status">{{ sitio.categoria }}</ion-badge>
+            <ion-badge [color]="sitio.visitado ? 'success' : 'medium'" class="badge-status">
+              {{ sitio.visitado ? 'Visitado' : 'Pendiente' }}
+            </ion-badge>
+          </div>
+          <span class="fecha-badge">
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ sitio.fechaRegistro }}
+          </span>
+        </div>
+
+        <ion-card-title class="sitio-title">{{ sitio.nombre }}</ion-card-title>
+
+        <div class="stars-display">
+          <ion-icon
+            *ngFor="let e of [1, 2, 3, 4, 5]"
+            [name]="e <= sitio.valoracion ? 'star' : 'star-outline'"
+            [class.star-filled]="e <= sitio.valoracion">
+          </ion-icon>
+          <span class="rating-label">{{ sitio.valoracion }}.0 / 5</span>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="quick-info-grid">
+          <div class="quick-box">
+            <ion-icon name="time-outline"></ion-icon>
+            <div>
+              <span class="lbl">Horario</span>
+              <span class="val">{{ sitio.horario || 'No especificado' }}</span>
+            </div>
+          </div>
+
+          <div class="quick-box">
+            <ion-icon name="cash-outline"></ion-icon>
+            <div>
+              <span class="lbl">Costo Entrada</span>
+              <span class="val">{{ sitio.costoEntrada || 'Gratis' }}</span>
+            </div>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Descripción -->
+    <ion-card class="detail-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="document-text-outline"></ion-icon>
+          Descripción
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="descripcion-texto">
+        {{ sitio.descripcion }}
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Ubicación GPS y Distancia (Haversine) -->
+    <ion-card class="detail-card" *ngIf="sitio.latitud">
+      <ion-card-header>
+        <div class="gps-header">
+          <ion-card-subtitle class="seccion-label">
+            <ion-icon name="navigate-outline"></ion-icon>
+            Coordenadas de Ubicación
+          </ion-card-subtitle>
+          <ion-badge color="primary" class="dist-pill" *ngIf="distanciaActualKm !== null">
+            A {{ distanciaActualKm | number:'1.1-2' }} km
+          </ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="gps-boxes">
+          <div class="gps-box">
+            <span class="lbl">Latitud</span>
+            <span class="val">{{ sitio.latitud | number:'1.4-6' }}</span>
+          </div>
+          <div class="gps-box">
+            <span class="lbl">Longitud</span>
+            <span class="val">{{ sitio.longitud | number:'1.4-6' }}</span>
+          </div>
+          <div class="gps-box">
+            <span class="lbl">Precisión</span>
+            <span class="val">±{{ sitio.precision | number:'1.1-2' }} m</span>
+          </div>
+        </div>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          size="small"
+          class="btn-outline ion-margin-top"
+          (click)="abrirEnGoogleMaps()">
+          <ion-icon slot="start" name="map-outline"></ion-icon>
+          Abrir en Google Maps
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Funciones Adicionales: Compartir, QR y Recordatorio -->
+    <ion-card class="detail-card">
+      <ion-card-header>
+        <ion-card-subtitle class="seccion-label">
+          <ion-icon name="share-social-outline"></ion-icon>
+          Compartir y Utilidades
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="utility-buttons">
+          <ion-button fill="outline" size="small" class="btn-outline" (click)="compartirSitio()">
+            <ion-icon slot="start" name="share-social-outline"></ion-icon>
+            Compartir
+          </ion-button>
+
+          <ion-button fill="outline" size="small" color="secondary" class="btn-outline" (click)="mostrarQR()">
+            <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+            Código QR
+          </ion-button>
+        </div>
+
+        <ion-button
+          *ngIf="!sitio.visitado"
+          expand="block"
+          fill="clear"
+          size="small"
+          class="btn-reminder"
+          (click)="programarRecordatorio()">
+          <ion-icon slot="start" name="notifications-outline"></ion-icon>
+          Recordarme visitar este lugar
+        </ion-button>
+
+        <!-- Vista de QR generado -->
+        <div class="qr-box" *ngIf="qrDataUrl">
+          <img [src]="qrDataUrl" alt="Código QR del sitio" />
+          <p>Escanea este código desde otro dispositivo para importar el sitio.</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
+
+<!-- Pie Fijo con Acciones Editar y Eliminar -->
+<ion-footer class="page-footer ion-no-border" *ngIf="sitio">
+  <ion-toolbar class="footer-toolbar">
+    <div class="footer-buttons">
+      <ion-button color="warning" class="btn-action" (click)="editarSitio()">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+      </ion-button>
+      <ion-button color="danger" class="btn-action" (click)="confirmarEliminar()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

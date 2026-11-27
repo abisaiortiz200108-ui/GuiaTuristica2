@@ -1,0 +1,197 @@
+.page-content {
+  --background: var(--ion-background-color);
+}
+
+.page-container {
+  padding: 12px 14px 24px 14px;
+}
+
+.segment-toolbar {
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.seccion-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Tarjetas de favoritos/visitados
+.sitio-card {
+  margin: 0 0 10px 0;
+  border-radius: 14px;
+  background: var(--app-card-bg);
+  box-shadow: 0 4px 12px var(--app-shadow);
+  border: 1px solid var(--app-border);
+
+  .sitio-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .sitio-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid var(--app-border);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .sitio-icon-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    background: var(--app-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 26px;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  .sitio-info {
+    flex: 1;
+    min-width: 0;
+
+    .sitio-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+
+      .sitio-nombre {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--ion-text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .rating-badge {
+        font-size: 0.72rem;
+        padding: 3px 7px;
+        border-radius: 6px;
+        flex-shrink: 0;
+      }
+    }
+
+    .sitio-categoria {
+      margin: 2px 0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ion-color-primary);
+    }
+
+    .descripcion-corta {
+      margin: 2px 0 0 0;
+      font-size: 0.82rem;
+      color: var(--ion-color-medium);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .btn-unfav {
+    margin: 0;
+    --padding-start: 6px;
+    --padding-end: 6px;
+  }
+}
+
+// Tarjetas de ajustes
+.settings-card {
+  margin: 0 0 12px 0;
+  border-radius: 14px;
+  background: var(--app-card-bg);
+  box-shadow: 0 4px 12px var(--app-shadow);
+  border: 1px solid var(--app-border);
+
+  ion-card-header {
+    padding-bottom: 8px;
+  }
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setting-item {
+  --background: var(--app-surface);
+  --color: var(--ion-text-color);
+  --border-radius: 10px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  .setting-icon {
+    font-size: 22px;
+    color: var(--ion-color-primary);
+    margin-right: 12px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  p {
+    margin: 2px 0 0 0;
+    font-size: 0.76rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.storage-info {
+  margin: 0 0 12px 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--ion-color-medium);
+}
+
+.btn-outline {
+  margin: 0;
+  --border-radius: 10px;
+  font-weight: 600;
+}
+
+.empty-state {
+  margin-top: 56px;
+  padding: 0 16px;
+  color: var(--ion-color-medium);
+
+  .empty-icon {
+    font-size: 58px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 0.92rem;
+  }
+}

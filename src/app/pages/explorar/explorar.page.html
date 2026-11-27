@@ -1,0 +1,139 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Explorar Sitios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="escanearQR()" fill="clear" color="light" title="Importar sitio por QR">
+        <ion-icon slot="icon-only" name="scan-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="textoBusqueda"
+      (ionInput)="aplicarFiltros()"
+      placeholder="Buscar por nombre o descripción">
+    </ion-searchbar>
+  </ion-toolbar>
+
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment
+      [(ngModel)]="categoriaSeleccionada"
+      (ionChange)="aplicarFiltros()"
+      scrollable="true"
+      class="categoria-segment">
+      <ion-segment-button value="Todas">
+        <ion-label>Todas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Naturaleza">
+        <ion-label>Naturaleza</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Gastronomía">
+        <ion-label>Gastronomía</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Historia">
+        <ion-label>Historia</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Cultura">
+        <ion-label>Cultura</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Recreación">
+        <ion-label>Recreación</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page-container">
+
+    <!-- Barra de Ordenamiento -->
+    <div class="sort-bar">
+      <span class="result-count">{{ sitiosFiltrados.length }} sitios</span>
+      <div class="sort-chips">
+        <ion-chip
+          [class.chip-active]="ordenPor === 'distancia'"
+          (click)="cambiarOrden('distancia')">
+          <ion-icon name="navigate-outline"></ion-icon>
+          <ion-label>Cercanía</ion-label>
+        </ion-chip>
+        <ion-chip
+          [class.chip-active]="ordenPor === 'valoracion'"
+          (click)="cambiarOrden('valoracion')">
+          <ion-icon name="star-outline"></ion-icon>
+          <ion-label>Valoración</ion-label>
+        </ion-chip>
+      </div>
+    </div>
+
+    <!-- Listado con ion-item-sliding (Editar / Eliminar) -->
+    <ion-list class="sliding-list" lines="none">
+      <ion-item-sliding *ngFor="let sitio of sitiosFiltrados" class="sitio-sliding">
+        <ion-item class="sliding-item-wrapper" lines="none">
+          <ion-card class="sitio-card" button (click)="abrirDetalle(sitio.id)">
+            <ion-card-content class="sitio-card-content">
+              <div class="sitio-thumb" *ngIf="sitio.fotoPath">
+                <img [src]="sitio.fotoPath" [alt]="sitio.nombre" />
+              </div>
+              <div class="sitio-icon-thumb" *ngIf="!sitio.fotoPath">
+                <ion-icon name="image-outline"></ion-icon>
+              </div>
+
+              <div class="sitio-info">
+                <div class="sitio-header-row">
+                  <h3 class="sitio-nombre">{{ sitio.nombre }}</h3>
+                  <ion-icon
+                    *ngIf="sitio.favorito"
+                    name="heart"
+                    color="danger"
+                    class="fav-icon">
+                  </ion-icon>
+                </div>
+
+                <div class="meta-row">
+                  <ion-badge color="primary" class="cat-badge">{{ sitio.categoria }}</ion-badge>
+                  <ion-badge color="success" class="cat-badge" *ngIf="sitio.visitado">Visitado</ion-badge>
+                </div>
+
+                <p class="descripcion-corta">{{ sitio.descripcion }}</p>
+
+                <div class="footer-meta">
+                  <span class="meta-item">
+                    <ion-icon name="star" class="star-icon"></ion-icon>
+                    {{ sitio.valoracion }}.0
+                  </span>
+                  <span class="meta-item" *ngIf="sitio.distanciaKm !== undefined">
+                    <ion-icon name="navigate-outline"></ion-icon>
+                    {{ sitio.distanciaKm | number:'1.1-1' }} km
+                  </span>
+                  <span class="meta-item" *ngIf="sitio.costoEntrada">
+                    <ion-icon name="cash-outline"></ion-icon>
+                    {{ sitio.costoEntrada }}
+                  </span>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+
+        <ion-item-options side="end" class="sliding-options">
+          <ion-item-option color="warning" class="opt-btn" (click)="editarSitio(sitio.id)">
+            <ion-icon slot="top" name="create-outline"></ion-icon>
+            Editar
+          </ion-item-option>
+          <ion-item-option color="danger" class="opt-btn" (click)="confirmarEliminar(sitio)">
+            <ion-icon slot="top" name="trash-outline"></ion-icon>
+            Eliminar
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- Estado Vacío -->
+    <div *ngIf="sitiosFiltrados.length === 0" class="empty-state ion-text-center">
+      <ion-icon name="compass-outline" class="empty-icon"></ion-icon>
+      <p>No se encontraron sitios con los filtros aplicados</p>
+    </div>
+
+  </div>
+</ion-content>
